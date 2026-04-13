@@ -1,161 +1,124 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import Image from "next/image";
-import { BUILDS } from "@/constants/builds";
+
+const BUILDS = [
+  {
+    id: 1, title: "The Predator", subtitle: "Full Off-Road Beast Build",
+    desc: "6-inch lift, 37\" mud terrains, rock sliders, snorkel, and full underbody protection. Built to dominate any trail.",
+    image: "/images/builds/build1.jpg",
+    tags: ["Lift Kit", "Custom Wheels", "Snorkel", "Rock Sliders"],
+    stats: [{ label: "Lift", value: '6"' }, { label: "Tyres", value: '37"' }, { label: "Power", value: "+45HP" }],
+  },
+  {
+    id: 2, title: "The Overland King", subtitle: "Long-Range Expedition Build",
+    desc: "Dual battery system, roof tent platform, long-range fuel tank, and full suspension overhaul for the ultimate overlanding rig.",
+    image: "/images/builds/build2.jpg",
+    tags: ["Dual Battery", "Roof Rack", "Aux Tank", "Recovery Gear"],
+    stats: [{ label: "Lift", value: '4"' }, { label: "Tyres", value: '35"' }, { label: "Power", value: "+30HP" }],
+  },
+  {
+    id: 3, title: "The Rock Crawler", subtitle: "Technical Trail Machine",
+    desc: "Locking differentials, ultra-low transfer case, 40\" tires, and custom fabricated long-travel suspension for pure rock crawling performance.",
+    image: "/images/builds/build3.jpg",
+    tags: ["Lockers", "Long Travel", '40" Tyres', "Custom Fab"],
+    stats: [{ label: "Lift", value: '8"' }, { label: "Tyres", value: '40"' }, { label: "Power", value: "+60HP" }],
+  },
+  {
+    id: 4, title: "The Street Fighter", subtitle: "Performance Street & Track",
+    desc: "Lowered stance, performance tune, upgraded brakes, and custom body styling. Where engineering meets urban aggression.",
+    image: "/images/builds/build4.jpg",
+    tags: ["Performance Tune", "Sport Suspension", "Brake Upgrade", "Custom Look"],
+    stats: [{ label: "Lift", value: '-1"' }, { label: "Tyres", value: '33"' }, { label: "Power", value: "+80HP" }],
+  },
+];
 
 export default function Builds() {
   const sectionRef = useRef<HTMLElement>(null);
-  const [hoveredBuild, setHoveredBuild] = useState<number | null>(null);
 
   useEffect(() => {
     const section = sectionRef.current;
     if (!section) return;
-    const observer = new IntersectionObserver(
-      (entries) => entries.forEach((e) => e.isIntersecting && e.target.classList.add("visible")),
+    const obs = new IntersectionObserver(
+      (entries) => entries.forEach((e) => { if (e.isIntersecting) e.target.classList.add("visible"); }),
       { threshold: 0.08 }
     );
-    section.querySelectorAll(".reveal").forEach((el) => observer.observe(el));
-    return () => observer.disconnect();
+    section.querySelectorAll(".reveal").forEach((el) => obs.observe(el));
+    return () => obs.disconnect();
   }, []);
 
   return (
-    <section
-      id="builds"
-      ref={sectionRef}
-      className="relative py-24 lg:py-32 bg-dark overflow-hidden"
-    >
-      {/* Ambient glow */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-neon/3 blur-[120px] pointer-events-none" />
+    <section id="builds" ref={sectionRef} className="relative py-24 lg:py-32 overflow-hidden" style={{ background: "#0A0A0A" }}>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="glow-orb" style={{ width: 650, height: 650, left: "50%", top: "50%", transform: "translate(-50%,-50%)", opacity: 0.22 }} />
+
+      <div className="max-w-7xl mx-auto px-5 lg:px-8">
+
         {/* Header */}
-        <div className="mb-16 reveal">
-          <div className="flex items-center gap-3 mb-4">
-            <div className="h-px w-10 bg-amber" style={{ background: "var(--amber)" }} />
-            <span className="font-rajdhani text-sm tracking-[0.3em] uppercase font-600" style={{ color: "var(--amber)" }}>
-              Featured Work
-            </span>
-          </div>
-          <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-6">
-            <h2 className="font-orbitron text-3xl sm:text-4xl lg:text-5xl font-900 text-white leading-tight">
-              The Builds
-            </h2>
-            <p className="font-rajdhani text-white/50 text-sm max-w-xs tracking-wide">
-              Each build is a bespoke creation — engineered, tested, and trail-proven.
-            </p>
-          </div>
-        </div>
-
-        {/* Builds grid */}
-        <div className="grid md:grid-cols-2 gap-6 lg:gap-8">
-          {BUILDS.map((build, i) => (
-            <div
-              key={build.id}
-              className="reveal group relative overflow-hidden cursor-pointer"
-              style={{ transitionDelay: `${i * 100}ms` }}
-              onMouseEnter={() => setHoveredBuild(build.id)}
-              onMouseLeave={() => setHoveredBuild(null)}
-            >
-              {/* Image container */}
-              <div className="relative overflow-hidden" style={{ height: i === 0 ? "420px" : "320px" }}>
-                <Image
-                  src={build.image}
-                  alt={build.title}
-                  fill
-                  className="object-cover object-center transition-transform duration-700 group-hover:scale-110"
-                  sizes="(max-width: 768px) 100vw, 50vw"
-                />
-
-                {/* Gradient overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t from-dark via-dark/40 to-transparent transition-opacity duration-500" />
-                <div
-                  className={`absolute inset-0 bg-gradient-to-t from-neon/10 to-transparent transition-opacity duration-500 ${
-                    hoveredBuild === build.id ? "opacity-100" : "opacity-0"
-                  }`}
-                />
-
-                {/* Top badge */}
-                <div className="absolute top-4 left-4 border border-amber/40 bg-dark/60 backdrop-blur-sm px-3 py-1">
-                  <span className="font-rajdhani text-xs tracking-[0.2em] uppercase font-600" style={{ color: "var(--amber)" }}>
-                    {build.subtitle}
-                  </span>
-                </div>
-
-                {/* Stats overlay */}
-                <div
-                  className={`absolute top-4 right-4 flex flex-col gap-2 transition-all duration-500 ${
-                    hoveredBuild === build.id ? "opacity-100 translate-x-0" : "opacity-0 translate-x-4"
-                  }`}
-                >
-                  {Object.entries(build.stats).map(([key, val]) => (
-                    <div key={key} className="bg-dark/80 backdrop-blur-sm border border-neon/20 px-3 py-1.5 text-center">
-                      <div className="font-orbitron text-sm font-900 text-neon">{val}</div>
-                      <div className="font-rajdhani text-[10px] text-white/40 uppercase tracking-wider">{key}</div>
-                    </div>
-                  ))}
-                </div>
-
-                {/* Bottom content */}
-                <div className="absolute bottom-0 left-0 right-0 p-6">
-                  <h3 className="font-orbitron text-xl sm:text-2xl font-900 text-white mb-2 group-hover:text-neon transition-colors duration-300">
-                    {build.title}
-                  </h3>
-                  <p
-                    className={`font-rajdhani text-white/65 text-sm leading-relaxed transition-all duration-500 max-w-md ${
-                      hoveredBuild === build.id ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3"
-                    }`}
-                  >
-                    {build.description}
-                  </p>
-
-                  {/* Tags */}
-                  <div
-                    className={`flex flex-wrap gap-2 mt-4 transition-all duration-500 delay-75 ${
-                      hoveredBuild === build.id ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3"
-                    }`}
-                  >
-                    {build.tags.map((tag) => (
-                      <span
-                        key={tag}
-                        className="font-rajdhani text-xs border border-white/20 text-white/60 px-2 py-1 tracking-wider uppercase"
-                      >
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              </div>
-
-              {/* Neon border on hover */}
-              <div
-                className={`absolute inset-0 border transition-all duration-500 pointer-events-none ${
-                  hoveredBuild === build.id ? "border-neon/50" : "border-transparent"
-                }`}
-              />
-            </div>
-          ))}
-        </div>
-
-        {/* CTA Row */}
-        <div className="mt-14 flex flex-col sm:flex-row items-center justify-between gap-6 border-t border-metal-light/20 pt-10 reveal">
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6 mb-14 reveal">
           <div>
-            <h3 className="font-orbitron text-lg font-700 text-white mb-1">
-              Ready for Your Custom Build?
-            </h3>
-            <p className="font-rajdhani text-white/50 text-sm tracking-wide">
-              We&apos;ll engineer it from concept to completion.
-            </p>
+            <div className="label-tag mb-5">Featured Work</div>
+            <h2 className="heading-xl text-white">
+              The <span style={{ color: "#FF6200" }}>Builds</span>
+            </h2>
           </div>
           <button
             onClick={() => document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" })}
-            className="btn-primary text-sm flex-shrink-0"
+            className="btn-ghost self-start sm:self-auto"
           >
-            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-            </svg>
             Start Your Build
           </button>
+        </div>
+
+        {/* Grid */}
+        <div className="grid sm:grid-cols-2 gap-5">
+          {BUILDS.map((b, i) => (
+            <div
+              key={b.id}
+              className="build-card reveal"
+              style={{ height: 480, transitionDelay: `${i * 80}ms` }}
+            >
+              <Image
+                src={b.image} alt={b.title} fill
+                className="build-img" sizes="(max-width:640px) 100vw,50vw"
+              />
+              <div className="build-overlay" />
+              <div className="build-card-border" />
+
+              {/* Content */}
+              <div className="absolute inset-0 z-20 flex flex-col justify-end p-7">
+
+                {/* Tags */}
+                <div className="flex flex-wrap gap-1.5 mb-4">
+                  {b.tags.map((t) => (
+                    <span key={t} className="text-[10px] font-semibold px-2 py-0.5 rounded-full tracking-wide" style={{ background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.12)", color: "rgba(255,255,255,0.6)" }}>
+                      {t}
+                    </span>
+                  ))}
+                </div>
+
+                {/* Title */}
+                <div className="mb-3">
+                  <div className="text-xs font-medium mb-1 tracking-[0.12em] uppercase" style={{ color: "#FF6200" }}>{b.subtitle}</div>
+                  <h3 className="heading-lg text-white">{b.title}</h3>
+                </div>
+
+                {/* Description */}
+                <p className="text-sm leading-relaxed mb-5" style={{ color: "rgba(255,255,255,0.52)" }}>{b.desc}</p>
+
+                {/* Stats */}
+                <div className="flex gap-2 flex-wrap">
+                  {b.stats.map((s) => (
+                    <span key={s.label} className="build-stats-pill">
+                      <span style={{ color: "rgba(255,98,0,0.6)", fontSize: "0.65rem" }}>{s.label}</span>
+                      {s.value}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     </section>

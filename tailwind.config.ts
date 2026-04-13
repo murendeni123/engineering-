@@ -5,23 +5,25 @@ const config: Config = {
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
-    "./app/**/*.{js,ts,jsx,tsx,mdx}",
-    "./components/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
     extend: {
       colors: {
-        neon: "#39FF14",
-        amber: "#FFAB00",
-        charcoal: "#1A1A1A",
-        dark: "#0D0D0D",
+        bg: "#080808",
+        "surface-1": "#0E0E0E",
+        "surface-2": "#141414",
+        "surface-3": "#1C1C1C",
+        orange: { DEFAULT: "#FF6200", light: "#FF7A33", dark: "#CC4E00" },
+        dark: "#080808",
+        charcoal: "#0E0E0E",
         metal: "#2C2C2C",
         "metal-light": "#3D3D3D",
       },
       fontFamily: {
+        sans: ["Inter", "system-ui", "sans-serif"],
+        inter: ["Inter", "system-ui", "sans-serif"],
         orbitron: ["Orbitron", "sans-serif"],
         rajdhani: ["Rajdhani", "sans-serif"],
-        inter: ["Inter", "sans-serif"],
       },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",

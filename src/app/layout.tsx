@@ -1,5 +1,12 @@
 import type { Metadata } from "next";
+import { Inter } from "next/font/google";
 import "./globals.css";
+
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-inter",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   title: "MJ Auto Engineering | Off-Road & Jeep Specialists – Pretoria",
@@ -27,8 +34,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className="scroll-smooth">
-      <body className="bg-dark text-white overflow-x-hidden">
+    <html lang="en" className={`scroll-smooth ${inter.variable}`}>
+      <body className="overflow-x-hidden" style={{ background: "#080808", color: "#fff" }}>
         {children}
       </body>
     </html>

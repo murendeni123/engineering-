@@ -1,183 +1,128 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 
 const NAV_LINKS = [
-  { label: "About", href: "#about" },
-  { label: "Services", href: "#services" },
-  { label: "Builds", href: "#builds" },
-  { label: "Contact", href: "#contact" },
+  { href: "#about", label: "About" },
+  { href: "#services", label: "Services" },
+  { href: "#builds", label: "Builds" },
+  { href: "#contact", label: "Contact" },
 ];
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
-  const [menuOpen, setMenuOpen] = useState(false);
-  const [activeSection, setActiveSection] = useState("");
-  const navRef = useRef<HTMLElement>(null);
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 60);
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    const fn = () => setScrolled(window.scrollY > 48);
+    window.addEventListener("scroll", fn, { passive: true });
+    return () => window.removeEventListener("scroll", fn);
   }, []);
 
-  useEffect(() => {
-    if (menuOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
-    }
-    return () => { document.body.style.overflow = ""; };
-  }, [menuOpen]);
-
-  useEffect(() => {
-    const sections = NAV_LINKS.map((l) => l.href.replace("#", ""));
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) setActiveSection(entry.target.id);
-        });
-      },
-      { rootMargin: "-40% 0px -55% 0px" }
-    );
-    sections.forEach((id) => {
-      const el = document.getElementById(id);
-      if (el) observer.observe(el);
-    });
-    return () => observer.disconnect();
-  }, []);
-
-  const handleNavClick = (href: string) => {
-    setMenuOpen(false);
-    const id = href.replace("#", "");
-    const el = document.getElementById(id);
-    if (el) el.scrollIntoView({ behavior: "smooth" });
+  const scrollTo = (id: string) => {
+    setOpen(false);
+    document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
   };
 
   return (
-    <>
-      <nav
-        ref={navRef}
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-          scrolled
-            ? "py-3 bg-dark/95 backdrop-blur-md border-b border-neon/10"
-            : "py-5 bg-transparent"
-        }`}
-      >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
+    <header
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+        scrolled ? "nav-scrolled" : ""
+      }`}
+    >
+      <div className="max-w-7xl mx-auto px-5 lg:px-8">
+        <div className="flex items-center justify-between h-[72px]">
+
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-3 group" onClick={() => setMenuOpen(false)}>
-            {/* Mini grille icon */}
-            <div className="flex flex-col gap-[3px] w-8">
-              {[...Array(7)].map((_, i) => (
-                <div
-                  key={i}
-                  className="grille-slot h-[2px] rounded-full"
-                  style={{ animationDelay: `${i * 0.12}s` }}
-                />
-              ))}
+          <Link href="/" className="flex items-center gap-2.5 select-none">
+            <div
+              className="w-8 h-8 flex items-center justify-center rounded-md"
+              style={{ background: "rgba(255,98,0,0.12)", border: "1px solid rgba(255,98,0,0.25)" }}
+            >
+              <svg viewBox="0 0 24 24" className="w-4 h-4" fill="none" stroke="#FF6200" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round"
+                  d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
+              </svg>
             </div>
-            <div>
-              <span className="font-orbitron text-sm sm:text-base font-900 text-white group-hover:text-neon transition-colors duration-300 leading-none block">
-                MJ AUTO
-              </span>
-              <span className="font-rajdhani text-[10px] sm:text-xs text-neon/70 tracking-[0.2em] uppercase block">
+            <div className="leading-none">
+              <div className="text-white font-bold text-base tracking-tight">
+                MJ <span style={{ color: "#FF6200" }}>AUTO</span>
+              </div>
+              <div className="text-[9px] tracking-[0.18em] uppercase font-medium" style={{ color: "rgba(255,255,255,0.35)" }}>
                 Engineering
-              </span>
+              </div>
             </div>
           </Link>
 
-          {/* Desktop links */}
-          <div className="hidden md:flex items-center gap-8">
-            {NAV_LINKS.map((link) => (
-              <button
-                key={link.href}
-                onClick={() => handleNavClick(link.href)}
-                className={`nav-link ${
-                  activeSection === link.href.replace("#", "")
-                    ? "text-neon"
-                    : ""
-                }`}
-              >
-                {link.label}
-              </button>
+          {/* Desktop nav */}
+          <nav className="hidden md:flex items-center gap-7">
+            {NAV_LINKS.map((l) => (
+              <a key={l.href} href={l.href} className="nav-link">{l.label}</a>
             ))}
-          </div>
+          </nav>
 
-          {/* CTA + hamburger */}
-          <div className="flex items-center gap-4">
-            <button
-              onClick={() => handleNavClick("#contact")}
-              className="hidden sm:inline-flex btn-primary text-xs py-2.5 px-5"
+          {/* Right: phone + CTA */}
+          <div className="hidden md:flex items-center gap-5">
+            <a
+              href="tel:0785406778"
+              className="nav-link text-sm"
+              style={{ color: "rgba(255,255,255,0.4)", fontSize: "0.8rem" }}
             >
+              078 540 6778
+            </a>
+            <button onClick={() => scrollTo("contact")} className="btn-orange text-sm">
               Book Your Build
             </button>
-
-            {/* Hamburger */}
-            <button
-              className="md:hidden flex flex-col gap-[5px] p-2 z-50"
-              onClick={() => setMenuOpen(!menuOpen)}
-              aria-label="Toggle menu"
-            >
-              <span
-                className={`block h-[2px] bg-white transition-all duration-300 ${
-                  menuOpen ? "w-6 rotate-45 translate-y-[7px] bg-neon" : "w-6"
-                }`}
-              />
-              <span
-                className={`block h-[2px] bg-white transition-all duration-300 ${
-                  menuOpen ? "w-0 opacity-0" : "w-4"
-                }`}
-              />
-              <span
-                className={`block h-[2px] bg-white transition-all duration-300 ${
-                  menuOpen ? "w-6 -rotate-45 -translate-y-[7px] bg-neon" : "w-6"
-                }`}
-              />
-            </button>
           </div>
-        </div>
-      </nav>
 
-      {/* Mobile menu overlay */}
-      <div
-        className={`fixed inset-0 z-40 bg-dark/98 backdrop-blur-xl flex flex-col justify-center items-center gap-8 transition-all duration-500 md:hidden ${
-          menuOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
-        }`}
-        style={{ transform: menuOpen ? "translateY(0)" : "translateY(-100%)" }}
-      >
-        {/* Decorative grille background */}
-        <div className="absolute inset-0 flex flex-col justify-center gap-6 px-8 opacity-5 pointer-events-none">
-          {[...Array(12)].map((_, i) => (
-            <div key={i} className="h-[1px] bg-neon w-full" />
-          ))}
-        </div>
-
-        {NAV_LINKS.map((link, i) => (
+          {/* Mobile hamburger */}
           <button
-            key={link.href}
-            onClick={() => handleNavClick(link.href)}
-            className="font-orbitron text-2xl font-700 text-white hover:text-neon transition-colors duration-300 tracking-widest uppercase relative"
-            style={{ transitionDelay: menuOpen ? `${i * 80}ms` : "0ms" }}
+            onClick={() => setOpen(!open)}
+            className="md:hidden p-2"
+            aria-label="Toggle menu"
+            style={{ color: "rgba(255,255,255,0.7)" }}
           >
-            {link.label}
+            {open ? (
+              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.75}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            ) : (
+              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.75}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+              </svg>
+            )}
           </button>
-        ))}
-
-        <button
-          onClick={() => handleNavClick("#contact")}
-          className="btn-primary mt-4 text-sm"
-        >
-          Book Your Build
-        </button>
-
-        <div className="mt-8 text-center">
-          <p className="font-rajdhani text-white/40 text-sm tracking-widest uppercase">
-            078 540 6778
-          </p>
         </div>
       </div>
-    </>
+
+      {/* Mobile menu */}
+      <div
+        className={`md:hidden overflow-hidden transition-all duration-300 ${
+          open ? "max-h-[420px] opacity-100" : "max-h-0 opacity-0"
+        }`}
+        style={{ background: "rgba(8,8,8,0.97)", backdropFilter: "blur(24px)", borderTop: "1px solid rgba(255,255,255,0.06)" }}
+      >
+        <div className="px-5 py-6 flex flex-col gap-4">
+          {NAV_LINKS.map((l) => (
+            <a
+              key={l.href}
+              href={l.href}
+              className="nav-link text-base py-1"
+              onClick={() => setOpen(false)}
+            >
+              {l.label}
+            </a>
+          ))}
+          <div className="divider my-1" />
+          <a href="tel:0785406778" style={{ color: "rgba(255,255,255,0.4)", fontSize: "0.875rem" }}>
+            078 540 6778
+          </a>
+          <button onClick={() => scrollTo("contact")} className="btn-orange w-full justify-center mt-1">
+            Book Your Build
+          </button>
+        </div>
+      </div>
+    </header>
   );
 }
