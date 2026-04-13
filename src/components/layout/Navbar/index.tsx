@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 
-const NAV_LINKS = [
+const LINKS = [
   { href: "#about", label: "About" },
   { href: "#services", label: "Services" },
   { href: "#builds", label: "Builds" },
@@ -15,111 +15,87 @@ export default function Navbar() {
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
-    const fn = () => setScrolled(window.scrollY > 48);
+    const fn = () => setScrolled(window.scrollY > 40);
     window.addEventListener("scroll", fn, { passive: true });
     return () => window.removeEventListener("scroll", fn);
   }, []);
 
-  const scrollTo = (id: string) => {
-    setOpen(false);
-    document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
-  };
-
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        scrolled ? "nav-scrolled" : ""
-      }`}
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? "nav-scrolled" : ""}`}
     >
-      <div className="max-w-7xl mx-auto px-5 lg:px-8">
-        <div className="flex items-center justify-between h-[72px]">
+      <div className="max-w-7xl mx-auto px-5 lg:px-10">
+        <div className="flex items-center justify-between h-[68px]">
 
-          {/* Logo */}
-          <Link href="/" className="flex items-center gap-2.5 select-none">
-            <div
-              className="w-8 h-8 flex items-center justify-center rounded-md"
-              style={{ background: "rgba(255,98,0,0.12)", border: "1px solid rgba(255,98,0,0.25)" }}
-            >
-              <svg viewBox="0 0 24 24" className="w-4 h-4" fill="none" stroke="#FF6200" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round"
-                  d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
-              </svg>
-            </div>
-            <div className="leading-none">
-              <div className="text-white font-bold text-base tracking-tight">
-                MJ <span style={{ color: "#FF6200" }}>AUTO</span>
-              </div>
-              <div className="text-[9px] tracking-[0.18em] uppercase font-medium" style={{ color: "rgba(255,255,255,0.35)" }}>
-                Engineering
-              </div>
-            </div>
-          </Link>
+          {/* Mobile hamburger — left */}
+          <button
+            onClick={() => setOpen(!open)}
+            className="md:hidden w-10 h-10 rounded-full flex items-center justify-center transition-all duration-200"
+            style={{ background: open ? "#0A0A0A" : "rgba(10,10,10,0.08)" }}
+            aria-label="Menu"
+          >
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke={open ? "#fff" : "#0A0A0A"} strokeWidth={2}>
+              {open
+                ? <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                : <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />}
+            </svg>
+          </button>
 
-          {/* Desktop nav */}
-          <nav className="hidden md:flex items-center gap-7">
-            {NAV_LINKS.map((l) => (
+          {/* Desktop left links */}
+          <nav className="hidden md:flex items-center gap-8">
+            {LINKS.slice(0, 2).map((l) => (
               <a key={l.href} href={l.href} className="nav-link">{l.label}</a>
             ))}
           </nav>
 
-          {/* Right: phone + CTA */}
-          <div className="hidden md:flex items-center gap-5">
-            <a
-              href="tel:0785406778"
-              className="nav-link text-sm"
-              style={{ color: "rgba(255,255,255,0.4)", fontSize: "0.8rem" }}
+          {/* Brand — always centred */}
+          <Link href="/" className="absolute left-1/2 -translate-x-1/2 text-center select-none">
+            <div className="font-display text-lg font-black tracking-widest uppercase text-black leading-none" style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "clamp(1rem, 2.5vw, 1.3rem)", letterSpacing: "0.2em" }}>
+              MJ AUTO Engineering
+            </div>
+          </Link>
+
+          {/* Desktop right links + CTA */}
+          <div className="hidden md:flex items-center gap-8">
+            {LINKS.slice(2).map((l) => (
+              <a key={l.href} href={l.href} className="nav-link">{l.label}</a>
+            ))}
+            <button
+              onClick={() => document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" })}
+              className="btn-orange text-xs px-5 py-2.5"
             >
-              078 540 6778
-            </a>
-            <button onClick={() => scrollTo("contact")} className="btn-orange text-sm">
-              Book Your Build
+              Book a Build
             </button>
           </div>
 
-          {/* Mobile hamburger */}
-          <button
-            onClick={() => setOpen(!open)}
-            className="md:hidden p-2"
-            aria-label="Toggle menu"
-            style={{ color: "rgba(255,255,255,0.7)" }}
+          {/* Mobile phone pill — right */}
+          <a
+            href="tel:0785406778"
+            className="md:hidden w-10 h-10 rounded-full flex items-center justify-center text-[9px] font-bold tracking-widest text-white"
+            style={{ background: "#0A0A0A" }}
           >
-            {open ? (
-              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.75}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            ) : (
-              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.75}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
-              </svg>
-            )}
-          </button>
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+            </svg>
+          </a>
         </div>
       </div>
 
-      {/* Mobile menu */}
+      {/* Mobile drawer */}
       <div
-        className={`md:hidden overflow-hidden transition-all duration-300 ${
-          open ? "max-h-[420px] opacity-100" : "max-h-0 opacity-0"
-        }`}
-        style={{ background: "rgba(8,8,8,0.97)", backdropFilter: "blur(24px)", borderTop: "1px solid rgba(255,255,255,0.06)" }}
+        className={`md:hidden overflow-hidden transition-all duration-300 ${open ? "max-h-96 opacity-100" : "max-h-0 opacity-0"}`}
+        style={{ background: "rgba(244,243,238,0.98)", backdropFilter: "blur(20px)", borderTop: "1px solid rgba(10,10,10,0.08)" }}
       >
-        <div className="px-5 py-6 flex flex-col gap-4">
-          {NAV_LINKS.map((l) => (
-            <a
-              key={l.href}
-              href={l.href}
-              className="nav-link text-base py-1"
-              onClick={() => setOpen(false)}
-            >
+        <div className="px-6 py-6 flex flex-col gap-5">
+          {LINKS.map((l) => (
+            <a key={l.href} href={l.href} className="text-base font-semibold text-black tracking-wide" onClick={() => setOpen(false)}>
               {l.label}
             </a>
           ))}
-          <div className="divider my-1" />
-          <a href="tel:0785406778" style={{ color: "rgba(255,255,255,0.4)", fontSize: "0.875rem" }}>
-            078 540 6778
-          </a>
-          <button onClick={() => scrollTo("contact")} className="btn-orange w-full justify-center mt-1">
-            Book Your Build
+          <div className="divider" />
+          <a href="tel:0785406778" className="text-sm font-medium" style={{ color: "#6B6B6B" }}>078 540 6778</a>
+          <button onClick={() => { setOpen(false); document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" }); }} className="btn-orange justify-center">
+            Book a Build
           </button>
         </div>
       </div>

@@ -1,10 +1,17 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Inter, Bebas_Neue } from "next/font/google";
 import "./globals.css";
 
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-inter",
+  display: "swap",
+});
+
+const bebasNeue = Bebas_Neue({
+  subsets: ["latin"],
+  weight: "400",
+  variable: "--font-bebas",
   display: "swap",
 });
 
@@ -34,8 +41,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`scroll-smooth ${inter.variable}`}>
-      <body className="overflow-x-hidden" style={{ background: "#080808", color: "#fff" }}>
+    <html lang="en" className={`scroll-smooth ${inter.variable} ${bebasNeue.variable}`}>
+      <body className="overflow-x-hidden" style={{ background: "#F4F3EE", color: "#0A0A0A" }}>
         {children}
       </body>
     </html>

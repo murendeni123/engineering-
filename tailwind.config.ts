@@ -22,6 +22,8 @@ const config: Config = {
       fontFamily: {
         sans: ["Inter", "system-ui", "sans-serif"],
         inter: ["Inter", "system-ui", "sans-serif"],
+        display: ["Bebas Neue", "sans-serif"],
+        bebas: ["Bebas Neue", "sans-serif"],
         orbitron: ["Orbitron", "sans-serif"],
         rajdhani: ["Rajdhani", "sans-serif"],
       },
