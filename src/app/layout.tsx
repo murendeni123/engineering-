@@ -16,22 +16,26 @@ const bebasNeue = Bebas_Neue({
 });
 
 export const metadata: Metadata = {
-  title: "MJ Auto Engineering | Off-Road & Jeep Specialists – Pretoria",
+  title: "MJ Motor Mechanics | Jeep, Dodge & Chrysler Specialists",
   description:
-    "Pretoria's premier off-road and Jeep engineering workshop. Expert diagnostics, engine rebuilds, lift kits, custom builds, and ECU work. 391 Ketjen St, Pretoria West.",
+    "Precision automotive specialists for Jeep, Dodge & Chrysler vehicles. Expert diagnostics, repairs, transmission work, and custom builds in Pretoria.",
   keywords: [
     "Jeep specialist Pretoria",
-    "off-road builds",
-    "lift kits Pretoria",
+    "Dodge repairs",
+    "Chrysler service",
     "vehicle diagnostics",
-    "engine rebuilds",
-    "ECU tuning",
-    "MJ Auto Engineering",
+    "transmission repairs",
+    "MJ Motor Mechanics",
   ],
+  icons: {
+    icon: "/images/logo/icon.jpg",
+    apple: "/images/logo/icon.jpg",
+  },
   openGraph: {
-    title: "MJ Auto Engineering | Off-Road & Jeep Specialists",
-    description: "Engineering Power. Built for the Wild.",
+    title: "MJ Motor Mechanics | Jeep, Dodge & Chrysler Specialists",
+    description: "Precision Automotive Specialists",
     type: "website",
+    images: ["/images/logo/icon.jpg"],
   },
 };
 
@@ -42,7 +46,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={`scroll-smooth ${inter.variable} ${bebasNeue.variable}`}>
-      <body className="overflow-x-hidden" style={{ background: "#F4F3EE", color: "#0A0A0A" }}>
+      <body className="overflow-x-hidden bg-light text-gray-800">
         {children}
       </body>
     </html>

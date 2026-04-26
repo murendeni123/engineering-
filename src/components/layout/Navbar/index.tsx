@@ -1,12 +1,16 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
 import Link from "next/link";
+import Image from "next/image";
 
 const LINKS = [
-  { href: "#about", label: "About" },
+  { href: "#home", label: "Home" },
   { href: "#services", label: "Services" },
-  { href: "#builds", label: "Builds" },
+  { href: "#about", label: "About" },
+  { href: "#builds", label: "Gallery" },
+  { href: "#testimonials", label: "Testimonials" },
   { href: "#contact", label: "Contact" },
 ];
 
@@ -22,83 +26,115 @@ export default function Navbar() {
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? "nav-scrolled" : ""}`}
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+        scrolled
+          ? "bg-white/95 shadow-md backdrop-blur-md"
+          : "bg-black/25 backdrop-blur-md"
+      }`}
     >
-      <div className="max-w-7xl mx-auto px-5 lg:px-10">
-        <div className="flex items-center justify-between h-[68px]">
+      <div className="max-w-7xl mx-auto px-4 lg:px-8">
+        <div className="flex items-center justify-between h-[72px] md:h-[88px]">
 
-          {/* Mobile hamburger — left */}
+          {/* Logo */}
+          <Link href="/" className="flex items-center gap-2">
+            <div className="relative w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20">
+              <Image
+                src="/images/logo/LOGO_2.png"
+                alt="MJ Motor Mechanics"
+                fill
+                className="object-contain"
+                priority
+              />
+            </div>
+            <span
+              className={`hidden sm:block font-bold text-lg ${
+                scrolled ? "text-primary" : "text-white"
+              }`}
+              style={scrolled ? undefined : { textShadow: "0 2px 12px rgba(0,0,0,0.55)" }}
+            >
+              MJ Motor Mechanics
+            </span>
+          </Link>
+
+          {/* Desktop Navigation */}
+          <nav className="hidden lg:flex items-center gap-8">
+            {LINKS.map((link) => (
+              <motion.a
+                key={link.href}
+                href={link.href}
+                whileHover={{ y: -2 }}
+                className={`text-sm font-medium transition-colors duration-200 ${
+                  scrolled
+                    ? "text-gray-700 hover:text-primary"
+                    : "text-white/95 hover:text-white"
+                }`}
+                style={scrolled ? undefined : { textShadow: "0 2px 12px rgba(0,0,0,0.55)" }}
+              >
+                {link.label}
+              </motion.a>
+            ))}
+            <motion.button
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              onClick={() => document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" })}
+              className="bg-primary text-white px-5 py-2.5 rounded font-semibold text-sm hover:bg-secondary transition-colors"
+            >
+              Book a Service
+            </motion.button>
+          </nav>
+
+          {/* Mobile Menu Button */}
           <button
             onClick={() => setOpen(!open)}
-            className="md:hidden w-10 h-10 rounded-full flex items-center justify-center transition-all duration-200"
-            style={{ background: open ? "#0A0A0A" : "rgba(10,10,10,0.08)" }}
+            className={`lg:hidden w-10 h-10 flex items-center justify-center rounded-lg transition-colors ${
+              scrolled
+                ? "bg-gray-100 hover:bg-gray-200"
+                : "bg-white/15 hover:bg-white/25"
+            }`}
             aria-label="Menu"
           >
-            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke={open ? "#fff" : "#0A0A0A"} strokeWidth={2}>
+            <svg
+              className={`w-5 h-5 ${scrolled ? "text-primary" : "text-white"}`}
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={2}
+            >
               {open
                 ? <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
                 : <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />}
             </svg>
           </button>
-
-          {/* Desktop left links */}
-          <nav className="hidden md:flex items-center gap-8">
-            {LINKS.slice(0, 2).map((l) => (
-              <a key={l.href} href={l.href} className="nav-link">{l.label}</a>
-            ))}
-          </nav>
-
-          {/* Brand — always centred */}
-          <Link href="/" className="absolute left-1/2 -translate-x-1/2 text-center select-none">
-            <div className="font-display text-lg font-black tracking-widest uppercase text-black leading-none" style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "clamp(1rem, 2.5vw, 1.3rem)", letterSpacing: "0.2em" }}>
-              MJ AUTO Engineering
-            </div>
-          </Link>
-
-          {/* Desktop right links + CTA */}
-          <div className="hidden md:flex items-center gap-8">
-            {LINKS.slice(2).map((l) => (
-              <a key={l.href} href={l.href} className="nav-link">{l.label}</a>
-            ))}
-            <button
-              onClick={() => document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" })}
-              className="btn-orange text-xs px-5 py-2.5"
-            >
-              Book a Build
-            </button>
-          </div>
-
-          {/* Mobile phone pill — right */}
-          <a
-            href="tel:0785406778"
-            className="md:hidden w-10 h-10 rounded-full flex items-center justify-center text-[9px] font-bold tracking-widest text-white"
-            style={{ background: "#0A0A0A" }}
-          >
-            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-            </svg>
-          </a>
         </div>
       </div>
 
-      {/* Mobile drawer */}
-      <div
-        className={`md:hidden overflow-hidden transition-all duration-300 ${open ? "max-h-96 opacity-100" : "max-h-0 opacity-0"}`}
-        style={{ background: "rgba(244,243,238,0.98)", backdropFilter: "blur(20px)", borderTop: "1px solid rgba(10,10,10,0.08)" }}
+      {/* Mobile Menu */}
+      <motion.div
+        initial={false}
+        animate={{ height: open ? "auto" : 0, opacity: open ? 1 : 0 }}
+        className="lg:hidden overflow-hidden bg-white border-t border-gray-200"
       >
-        <div className="px-6 py-6 flex flex-col gap-5">
-          {LINKS.map((l) => (
-            <a key={l.href} href={l.href} className="text-base font-semibold text-black tracking-wide" onClick={() => setOpen(false)}>
-              {l.label}
+        <div className="px-4 py-6 flex flex-col gap-4">
+          {LINKS.map((link) => (
+            <a
+              key={link.href}
+              href={link.href}
+              onClick={() => setOpen(false)}
+              className="text-gray-700 font-medium py-2 hover:text-primary transition-colors"
+            >
+              {link.label}
             </a>
           ))}
-          <div className="divider" />
-          <a href="tel:0785406778" className="text-sm font-medium" style={{ color: "#6B6B6B" }}>078 540 6778</a>
-          <button onClick={() => { setOpen(false); document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" }); }} className="btn-orange justify-center">
-            Book a Build
+          <hr className="border-gray-200" />
+          <a href="tel:0785406778" className="text-gray-500 text-sm">078 540 6778</a>
+          <button
+            onClick={() => { setOpen(false); document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" }); }}
+            className="bg-primary text-white py-3 rounded font-semibold text-center hover:bg-secondary transition-colors"
+          >
+            Book a Service
           </button>
         </div>
-      </div>
+      </motion.div>
     </header>
   );
 }

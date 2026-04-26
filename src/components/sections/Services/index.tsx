@@ -1,142 +1,144 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { motion } from "framer-motion";
+import { useInView } from "react-intersection-observer";
+import Image from "next/image";
 
 const SERVICES = [
   {
-    num: "01", title: "Vehicle Diagnostics",
-    desc: "State-of-the-art electronic diagnostics and fault code analysis. We pinpoint issues fast.",
-    features: ["ECU Scanning", "Fault Code Analysis", "Performance Testing"],
+    title: "Diagnostics",
+    desc: "State-of-the-art electronic diagnostics and fault code analysis for all vehicle systems.",
+    img: "/images/services/service1.jpg",
   },
   {
-    num: "02", title: "Engine Repairs & Rebuilds",
-    desc: "Full engine overhauls, rebuilds, and performance upgrades — engineered for power and longevity.",
-    features: ["Full Rebuilds", "Performance Upgrades", "Head Gasket Repairs"],
+    title: "Repairs",
+    desc: "Complete mechanical repairs from minor fixes to major overhauls by certified technicians.",
+    img: "/images/services/service2.jpg.avif",
   },
   {
-    num: "03", title: "Suspension & Lift Kits",
-    desc: "Custom suspension setups for maximum ground clearance. Lift kits and heavy-duty upgrades.",
-    features: ["Lift Kits", "Coilover Installs", "Alignment & Geometry"],
+    title: "Transmission",
+    desc: "Expert transmission diagnostics, repairs, and rebuilds for automatic and manual systems.",
+    img: "/images/services/service3.jpg",
   },
   {
-    num: "04", title: "Off-Road Custom Builds",
-    desc: "Full custom off-road transformations from concept to completion — rock crawlers to overlanders.",
-    features: ["Rock Sliders", "Skid Plates", "Snorkel Installs"],
-  },
-  {
-    num: "05", title: "Electrical & ECU Work",
-    desc: "Advanced electrical systems, ECU tuning, and custom auxiliary electrical builds.",
-    features: ["ECU Remapping", "Wiring Harness", "Auxiliary Systems"],
-  },
-  {
-    num: "06", title: "Custom Quote",
-    desc: "Have a unique vision? Bring us your idea — we engineer bespoke solutions for any platform.",
-    features: ["Free Consultation", "Custom Fabrication", "Full Project Management"],
-    cta: true,
+    title: "Electrical",
+    desc: "Advanced electrical system repairs, ECU diagnostics, and custom wiring solutions.",
+    img: "/images/about/about1.jpg",
   },
 ];
 
+const cardVariants = {
+  hidden: { opacity: 0, y: 30 },
+  visible: (i: number) => ({
+    opacity: 1,
+    y: 0,
+    transition: {
+      delay: i * 0.1,
+      duration: 0.5,
+      ease: "easeOut",
+    },
+  }),
+};
+
 export default function Services() {
-  const ref = useRef<HTMLElement>(null);
-  useEffect(() => {
-    const section = ref.current;
-    if (!section) return;
-    const obs = new IntersectionObserver(
-      (entries) => entries.forEach((e) => { if (e.isIntersecting) e.target.classList.add("visible"); }),
-      { threshold: 0.06 }
-    );
-    section.querySelectorAll(".reveal").forEach((el) => obs.observe(el));
-    return () => obs.disconnect();
-  }, []);
+  const [ref, inView] = useInView({
+    triggerOnce: true,
+    threshold: 0.1,
+  });
 
   return (
-    <section id="services" ref={ref} className="relative" style={{ background: "#EDECE6" }}>
-
-      <div className="max-w-7xl mx-auto px-5 lg:px-10">
-
+    <section id="services" className="section-padding bg-white">
+      <div className="max-w-7xl mx-auto px-4 lg:px-8">
+        
         {/* Header */}
-        <div className="flex items-end justify-between py-10 reveal">
-          <div>
-            <span className="label-tag mb-4 block">What We Do</span>
-            <h2
-              className="font-black text-black leading-none"
-              style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "clamp(2.5rem, 6vw, 4.5rem)", letterSpacing: "0.02em" }}
-            >
-              Our Services
-            </h2>
-          </div>
-          <button
-            onClick={() => document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" })}
-            className="btn-black hidden sm:inline-flex"
+        <div className="text-center mb-12">
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-accent font-semibold text-sm uppercase tracking-widest mb-3"
           >
-            Get a Quote
-          </button>
+            What We Do
+          </motion.p>
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.1 }}
+            className="text-3xl md:text-4xl font-bold text-primary mb-4"
+          >
+            Our Services
+          </motion.h2>
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.2 }}
+            className="text-gray-600 max-w-2xl mx-auto"
+          >
+            Professional automotive services tailored to keep your vehicle running at peak performance.
+          </motion.p>
         </div>
 
-        <div className="divider" />
-
-        {/* Service rows */}
-        <div>
-          {SERVICES.map((s, i) => (
-            <div key={s.num}>
-              <div
-                className={`reveal grid sm:grid-cols-[80px_1fr_1fr] lg:grid-cols-[80px_1fr_1fr_auto] items-start gap-6 py-9 group transition-colors duration-300 cursor-default`}
-                style={{ transitionDelay: `${i * 50}ms` }}
-                onMouseEnter={(e) => (e.currentTarget.style.background = "rgba(255,98,0,0.03)")}
-                onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
-              >
-                {/* Number */}
-                <div className="text-xs font-bold tracking-widest pt-1" style={{ color: "#ABABAB" }}>{s.num}</div>
-
-                {/* Title */}
-                <div>
-                  <h3 className="font-bold text-black text-lg mb-1 tracking-tight group-hover:text-orange transition-colors duration-300"
-                    style={{ letterSpacing: "-0.01em" }}
-                    onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.color = "#FF6200")}
-                    onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.color = "#0A0A0A")}
-                  >
-                    {s.title}
-                    {s.cta && <span className="ml-2 text-xs font-semibold px-2 py-0.5 rounded-full align-middle" style={{ background: "#FF6200", color: "#fff", letterSpacing: "0.06em" }}>Popular</span>}
-                  </h3>
-                  <p className="text-sm leading-relaxed" style={{ color: "#6B6B6B", maxWidth: 360 }}>{s.desc}</p>
-                </div>
-
-                {/* Features */}
-                <div className="flex flex-wrap gap-2">
-                  {s.features.map((f) => (
-                    <span key={f} className="text-xs font-medium px-3 py-1 rounded-full" style={{ background: "rgba(10,10,10,0.07)", color: "#6B6B6B" }}>
-                      {f}
-                    </span>
-                  ))}
-                </div>
-
-                {/* Arrow CTA */}
-                <button
-                  onClick={() => document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" })}
-                  className="hidden lg:flex w-10 h-10 rounded-full items-center justify-center border transition-all duration-300 self-center flex-shrink-0"
-                  style={{ borderColor: "rgba(10,10,10,0.15)", color: "#0A0A0A" }}
-                  onMouseEnter={(e) => {
-                    (e.currentTarget as HTMLElement).style.background = "#FF6200";
-                    (e.currentTarget as HTMLElement).style.borderColor = "#FF6200";
-                    (e.currentTarget as HTMLElement).style.color = "#fff";
-                  }}
-                  onMouseLeave={(e) => {
-                    (e.currentTarget as HTMLElement).style.background = "transparent";
-                    (e.currentTarget as HTMLElement).style.borderColor = "rgba(10,10,10,0.15)";
-                    (e.currentTarget as HTMLElement).style.color = "#0A0A0A";
-                  }}
-                >
-                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                  </svg>
-                </button>
+        {/* Services Grid */}
+        <div ref={ref} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+          {SERVICES.map((service, i) => (
+            <motion.div
+              key={service.title}
+              custom={i}
+              initial="hidden"
+              animate={inView ? "visible" : "hidden"}
+              variants={cardVariants}
+              whileHover={{ 
+                scale: 1.03, 
+                rotateX: 3, 
+                rotateY: 3,
+                boxShadow: "0 20px 40px rgba(0,0,0,0.1)"
+              }}
+              className="bg-light rounded-lg overflow-hidden shadow-md cursor-pointer group"
+              style={{ transformStyle: "preserve-3d" }}
+            >
+              {/* Image */}
+              <div className="relative h-44 overflow-hidden">
+                <Image
+                  src={service.img}
+                  alt={service.title}
+                  fill
+                  className="object-cover transition-transform duration-500 group-hover:scale-110"
+                  sizes="(max-width: 768px) 100vw, 25vw"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
               </div>
-              {i < SERVICES.length - 1 && <div className="divider" />}
-            </div>
+              
+              {/* Content */}
+              <div className="p-5">
+                <h3 className="font-bold text-primary text-lg mb-2 group-hover:text-accent transition-colors">
+                  {service.title}
+                </h3>
+                <p className="text-gray-600 text-sm leading-relaxed">
+                  {service.desc}
+                </p>
+              </div>
+            </motion.div>
           ))}
         </div>
 
-        <div className="divider mt-0" />
+        {/* CTA */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="text-center mt-12"
+        >
+          <motion.button
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            onClick={() => document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" })}
+            className="bg-primary text-white px-8 py-3 rounded font-semibold hover:bg-secondary transition-colors"
+          >
+            Get a Free Quote
+          </motion.button>
+        </motion.div>
       </div>
     </section>
   );

@@ -1,98 +1,99 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { SITE } from "@/constants/site";
+
+const LINKS = [
+  { href: "#home", label: "Home" },
+  { href: "#services", label: "Services" },
+  { href: "#about", label: "About" },
+  { href: "#builds", label: "Gallery" },
+  { href: "#testimonials", label: "Testimonials" },
+  { href: "#contact", label: "Contact" },
+];
 
 export default function Footer() {
   return (
-    <footer style={{ background: "#F4F3EE" }}>
-      <div className="max-w-7xl mx-auto px-5 lg:px-10">
-
-        {/* Top section */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-10 py-14">
-
+    <footer className="bg-primary text-white">
+      <div className="max-w-7xl mx-auto px-4 lg:px-8 py-12">
+        
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+          
           {/* Brand */}
           <div>
-            <div
-              className="font-black text-black mb-4"
-              style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.6rem", letterSpacing: "0.15em" }}
-            >
-              MJ AUTO<br />Engineering
+            <div className="flex items-center gap-3 mb-4">
+              <div className="relative w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24">
+                <Image
+                  src="/images/logo/LOGO_2.png"
+                  alt="MJ Motor Mechanics"
+                  fill
+                  className="object-contain"
+                />
+              </div>
+              <span className="font-bold text-lg sm:text-xl">MJ Motor Mechanics</span>
             </div>
-            <p className="text-sm leading-relaxed mb-5" style={{ color: "#9B9B9B", maxWidth: 220 }}>
-              Pretoria&apos;s premier off-road and Jeep engineering specialists.
+            <p className="text-white/70 text-sm leading-relaxed mb-4 max-w-xs">
+              Jeep, Dodge &amp; Chrysler specialists. Precision automotive service you can trust.
             </p>
-            <div className="flex gap-2">
-              {[
-                { label: "FB", href: SITE.social.facebook },
-                { label: "IG", href: SITE.social.instagram },
-                { label: "WA", href: SITE.social.whatsapp },
-              ].map((s) => (
-                <a
-                  key={s.label}
-                  href={s.href}
-                  target="_blank" rel="noopener noreferrer"
-                  className="w-8 h-8 rounded-full flex items-center justify-center text-[9px] font-bold tracking-widest transition-all duration-200"
-                  style={{ border: "1.5px solid rgba(10,10,10,0.15)", color: "#9B9B9B" }}
-                  onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = "#FF6200"; (e.currentTarget as HTMLElement).style.color = "#fff"; (e.currentTarget as HTMLElement).style.borderColor = "#FF6200"; }}
-                  onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = "transparent"; (e.currentTarget as HTMLElement).style.color = "#9B9B9B"; (e.currentTarget as HTMLElement).style.borderColor = "rgba(10,10,10,0.15)"; }}
-                >
-                  {s.label}
-                </a>
-              ))}
-            </div>
           </div>
 
-          {/* Links */}
+          {/* Quick Links */}
           <div>
-            <h4 className="text-[10px] font-bold tracking-[0.18em] uppercase mb-5" style={{ color: "#ABABAB" }}>Navigate</h4>
-            <ul className="space-y-3">
-              {[
-                { href: "#about", label: "About" },
-                { href: "#services", label: "Services" },
-                { href: "#builds", label: "Builds" },
-                { href: "#contact", label: "Contact" },
-              ].map((l) => (
-                <li key={l.href}>
-                  <Link href={l.href} className="text-sm font-medium transition-colors duration-200" style={{ color: "#6B6B6B" }}
-                    onMouseEnter={(e) => ((e.target as HTMLElement).style.color = "#FF6200")}
-                    onMouseLeave={(e) => ((e.target as HTMLElement).style.color = "#6B6B6B")}
-                  >{l.label}</Link>
+            <h4 className="font-semibold text-white mb-4">Quick Links</h4>
+            <ul className="space-y-2">
+              {LINKS.map((link) => (
+                <li key={link.href}>
+                  <Link 
+                    href={link.href} 
+                    className="text-white/70 hover:text-accent transition-colors text-sm"
+                  >
+                    {link.label}
+                  </Link>
                 </li>
               ))}
             </ul>
           </div>
 
-          {/* Contact */}
+          {/* Contact Info */}
           <div>
-            <h4 className="text-[10px] font-bold tracking-[0.18em] uppercase mb-5" style={{ color: "#ABABAB" }}>Contact</h4>
-            <div className="space-y-4">
-              <div>
-                <p className="text-[10px] tracking-widest uppercase mb-1" style={{ color: "#ABABAB" }}>Address</p>
-                <p className="text-sm" style={{ color: "#6B6B6B" }}>{SITE.address}</p>
+            <h4 className="font-semibold text-white mb-4">Contact Info</h4>
+            <div className="space-y-3 text-sm">
+              <div className="flex items-start gap-3">
+                <svg className="w-5 h-5 text-accent flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+                <span className="text-white/70">{SITE.address}</span>
               </div>
-              <div>
-                <p className="text-[10px] tracking-widest uppercase mb-1" style={{ color: "#ABABAB" }}>Phone</p>
-                <a href={`tel:${SITE.phone.replace(/\s/g, "")}`} className="text-sm font-semibold" style={{ color: "#FF6200" }}>{SITE.phone}</a>
+              <div className="flex items-center gap-3">
+                <svg className="w-5 h-5 text-accent flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                </svg>
+                <a href={`tel:${SITE.phone.replace(/\s/g, "")}`} className="text-white/70 hover:text-accent transition-colors">
+                  {SITE.phone}
+                </a>
               </div>
-              <div>
-                <p className="text-[10px] tracking-widest uppercase mb-1" style={{ color: "#ABABAB" }}>Hours</p>
-                <p className="text-xs" style={{ color: "#9B9B9B" }}>{SITE.hours.weekdays}</p>
-                <p className="text-xs" style={{ color: "#9B9B9B" }}>{SITE.hours.weekend}</p>
+              <div className="flex items-start gap-3">
+                <svg className="w-5 h-5 text-accent flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <div className="text-white/70">
+                  <p>{SITE.hours.weekdays}</p>
+                  <p>{SITE.hours.weekend}</p>
+                </div>
               </div>
             </div>
           </div>
         </div>
 
-        <div className="divider" />
-
-        {/* Bottom bar */}
-        <div className="flex flex-col sm:flex-row justify-between items-center gap-3 py-5">
-          <p className="text-xs" style={{ color: "#ABABAB" }}>
-            © {new Date().getFullYear()} MJ Auto Engineering (Pty) Ltd. All rights reserved.
+        {/* Bottom Bar */}
+        <div className="border-t border-white/10 mt-10 pt-6 flex flex-col sm:flex-row justify-between items-center gap-4">
+          <p className="text-white/50 text-sm">
+            © {new Date().getFullYear()} MJ Motor Mechanics. All rights reserved.
           </p>
-          <p className="text-xs" style={{ color: "#C8C8C4" }}>
-            Built for the wild.
+          <p className="text-white/50 text-sm">
+            Precision Automotive Specialists
           </p>
         </div>
       </div>
